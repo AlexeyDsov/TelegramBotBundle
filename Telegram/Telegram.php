@@ -39,13 +39,17 @@ class Telegram
         $updates = $this->api->getUpdates();
 
         $lastUpdateId = null;
-        foreach ($updates as $update) {
-            $lastUpdateId = $update->getUpdateId();
-            $this->processUpdate($update);
-        }
 
-        if ($lastUpdateId) {
-            $this->api->getUpdates($lastUpdateId + 1, 1);
+        try {
+            foreach ($updates as $update) {
+                $this->processUpdate($update);
+
+                $lastUpdateId = $update->getUpdateId();
+            }
+        } finally {
+            if ($lastUpdateId) {
+                $this->api->getUpdates($lastUpdateId + 1, 1);
+            }
         }
     }
 
