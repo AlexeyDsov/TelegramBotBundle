@@ -12,6 +12,10 @@ parameters:
     bo_shurik_telegram_bot.api.token:
     bo_shurik_telegram_bot.api.tracker_token:
 
+    bo_shurik_telegram_bot.result_status.successful: 'successful'
+    bo_shurik_telegram_bot.result_status.matched: 'matched'
+    bo_shurik_telegram_bot.result_status.unmatched: 'unmatched'
+
 services:
     bo_shurik_telegram_bot.telegram:
         class: "%bo_shurik_telegram_bot.telegram.class%"

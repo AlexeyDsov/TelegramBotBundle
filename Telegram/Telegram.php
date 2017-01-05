@@ -58,7 +58,6 @@ class Telegram
      */
     public function processUpdate($update)
     {
-        $event = new UpdateEvent($update);
-        $this->eventDispatcher->dispatch(TelegramEvents::UPDATE, $event);
+        $this->eventDispatcher->dispatch(TelegramEvents::UPDATE, new UpdateEvent($update));
     }
 }

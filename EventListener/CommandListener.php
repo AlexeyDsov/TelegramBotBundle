@@ -7,10 +7,9 @@
 
 namespace BoShurik\TelegramBotBundle\EventListener;
 
-use TelegramBot\Api\BotApi;
-use BoShurik\TelegramBotBundle\Telegram\Command\CommandPool;
-
 use BoShurik\TelegramBotBundle\Event\Telegram\UpdateEvent;
+use BoShurik\TelegramBotBundle\Telegram\Command\CommandInterface;
+use TelegramBot\Api\BotApi;
 
 class CommandListener
 {
@@ -18,16 +17,20 @@ class CommandListener
      * @var BotApi
      */
     private $api;
-    
-    /**
-     * @var CommandPool
-     */
-    private $commandPool;
 
-    public function __construct(BotApi $api, CommandPool $commandPool)
+    /**
+     * @var CommandInterface
+     */
+    private $command;
+
+    /**
+     * @param BotApi $api
+     * @param CommandInterface $command
+     */
+    public function __construct(BotApi $api, CommandInterface $command)
     {
         $this->api = $api;
-        $this->commandPool = $commandPool;
+        $this->command = $command;
     }
 
     /**
@@ -35,18 +38,12 @@ class CommandListener
      */
     public function onUpdate(UpdateEvent $event)
     {
-        foreach ($this->commandPool->getCommands() as $command) {
-            if (!$message = $event->getUpdate()->getMessage()) {
-                continue;
-            }
-            if (!$command->isApplicable($message)) {
-                continue;
-            }
+        if (is_null($message = $event->getUpdate()->getMessage())) {
+            return;
+        }
 
-            $command->execute($this->api, $message);
+        if ($this->command->execute($this->api, $message)->isMatched()) {
             $event->setProcessed();
-
-            break;
         }
     }
 }

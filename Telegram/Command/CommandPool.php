@@ -7,6 +7,9 @@
 
 namespace BoShurik\TelegramBotBundle\Telegram\Command;
 
+/**
+ * @deprecated
+ */
 class CommandPool
 {
     /**

@@ -18,16 +18,26 @@ class CommandCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $pool = $container->getDefinition('bo_shurik_telegram_bot.command_pool');
+        $chain = $container->getDefinition('bo_shurik_telegram_bot.command');
 
-        array_map(
-            function ($serviceAndTag) use ($pool) {
-                list($id, $tag) = $serviceAndTag;
+        $chain->replaceArgument(0, $this->getServicesReferencesList($container));
+    }
 
-                $pool->addMethodCall('addCommand', [new Reference($id)]);
-            },
-            $this->getOrderedServices($container)
-        );
+    /**
+     * @param ContainerBuilder $container
+     * @return array
+     */
+    private function getServicesReferencesList(ContainerBuilder $container)
+    {
+        return
+            array_map(
+                function ($serviceAndTag) {
+                    list($id, $tag) = $serviceAndTag;
+
+                    return new Reference($id);
+                },
+                $this->getOrderedServices($container)
+            );
     }
 
     /**

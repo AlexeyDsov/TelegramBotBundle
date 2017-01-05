@@ -7,10 +7,11 @@
 
 namespace BoShurik\TelegramBotBundle\Telegram\Command;
 
+use RuntimeException;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Message;
 
-class HelpCommand extends AbstractCommand implements PublicCommandInterface
+class HelpCommand implements CommandInterface
 {
     /**
      * @var CommandPool
@@ -35,45 +36,24 @@ class HelpCommand extends AbstractCommand implements PublicCommandInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function execute(BotApi $api, Message $message)
     {
-        $commands = $this->commandPool->getCommands();
-
-        $reply = '';
-        foreach ($commands as $command) {
-            if (!$command instanceof PublicCommandInterface) {
-                continue;
-            }
-
-            $reply .= sprintf("%s - %s\n", $command->getName(), $command->getDescription());
-        }
-
-        $api->sendMessage($message->getChat()->getId(), $reply);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getName()
-    {
-        return '/help';
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getAliases()
-    {
-        return $this->aliases;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getDescription()
-    {
-        return $this->description;
+        throw new RuntimeException(sprintf("'%s' not yet implemented", __CLASS__));
+//        $commands = $this->commandPool->getCommands();
+//
+//        $reply = '';
+//        foreach ($commands as $command) {
+//            if (!$command instanceof PublicCommandInterface) {
+//                continue;
+//            }
+//
+//            $reply .= sprintf("%s - %s\n", $command->getName(), $command->getDescription());
+//        }
+//
+//        $api->sendMessage($message->getChat()->getId(), $reply);
+//
+//        return new Successful();
     }
 }

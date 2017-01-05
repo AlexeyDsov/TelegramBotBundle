@@ -7,6 +7,7 @@
 
 namespace BoShurik\TelegramBotBundle\Telegram\Command;
 
+use BoShurik\TelegramBotBundle\Telegram\Command\Result\CommandResultInterface;
 use TelegramBot\Api\Types\Message;
 use TelegramBot\Api\BotApi;
 
@@ -15,13 +16,7 @@ interface CommandInterface
     /**
      * @param BotApi $api
      * @param Message $message
-     * @return mixed
+     * @return CommandResultInterface
      */
     public function execute(BotApi $api, Message $message);
-
-    /**
-     * @param Message $message
-     * @return boolean
-     */
-    public function isApplicable(Message $message);
 }
